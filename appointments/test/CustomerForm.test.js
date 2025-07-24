@@ -28,10 +28,10 @@ describe("CustomerForm", () => {
       expectToBeInputFieldOfTypeText(field(fieldName));
     });
 
-  const itIncludesTheExistingValue = (fieldName) => {
+  const itIncludesTheExistingValue = (fieldName, value) => {
     it("includes the existing value", () => {
-      render(<CustomerForm {...{ [fieldName]: "value" }} />);
-      expect(field(fieldName).value).toEqual("value");
+      render(<CustomerForm {...{ [fieldName]: value }} />);
+      expect(field(fieldName).value).toEqual(value);
     });
   };
 
@@ -50,13 +50,13 @@ describe("CustomerForm", () => {
     });
   };
 
-  const itSavesExistingValueWhenSubmitted = (fieldName) => {
+  const itSavesExistingValueWhenSubmitted = (fieldName, value) => {
     it("saves existing value when submitted", async () => {
       expect.hasAssertions();
       render(
         <CustomerForm
-          {...{ [fieldName]: "value" }}
-          onSubmit={(props) => expect(props[fieldName]).toEqual("value")}
+          {...{ [fieldName]: value }}
+          onSubmit={(props) => expect(props[fieldName]).toEqual(value)}
         />
       );
       React.act(() => {
@@ -83,7 +83,6 @@ describe("CustomerForm", () => {
     });
   };
 
-
   it("renders a form", () => {
     render(<CustomerForm />);
     expect(form("customer")).not.toBeNull();
@@ -91,10 +90,28 @@ describe("CustomerForm", () => {
 
   describe("First name field", () => {
     itRendersAsATextBox("firstName");
-    itIncludesTheExistingValue("firstName");
+    itIncludesTheExistingValue("firstName", "Ashley");
     itRendersALabel("firstName", "First name");
     itAssignsAndIdThatMatchesLabel("firstName");
-    itSavesExistingValueWhenSubmitted("firstName");
+    itSavesExistingValueWhenSubmitted("firstName", "Ashley");
     itSavesNewValueWhenSubmitted("firstName", "updatedValue");
+  });
+
+  describe("Last name field", () => {
+    itRendersAsATextBox("lastName");
+    itIncludesTheExistingValue("lastName", "Jones");
+    itRendersALabel("lastName", "Last name");
+    itAssignsAndIdThatMatchesLabel("lastName");
+    itSavesExistingValueWhenSubmitted("lastName", "Jones");
+    itSavesNewValueWhenSubmitted("lastName", "updatedValue");
+  });
+
+  describe("Phone number field", () => {
+    itRendersAsATextBox("phoneNumber");
+    itIncludesTheExistingValue("phoneNumber", "012345");
+    itRendersALabel("phoneNumber", "Phone number");
+    itAssignsAndIdThatMatchesLabel("phoneNumber");
+    itSavesExistingValueWhenSubmitted("phoneNumber", "012345");
+    itSavesNewValueWhenSubmitted("phoneNumber", "123456");
   });
 });
