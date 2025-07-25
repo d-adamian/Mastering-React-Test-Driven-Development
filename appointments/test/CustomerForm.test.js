@@ -76,7 +76,7 @@ describe("CustomerForm", () => {
       );
       React.act(() => {
         fireEvent.change((() => field(fieldName))(), {
-          target: { value: updatedValue },
+          target: { value: updatedValue, name: fieldName },
         });
         fireEvent.submit(form("customer"));
       });
@@ -113,5 +113,11 @@ describe("CustomerForm", () => {
     itAssignsAndIdThatMatchesLabel("phoneNumber");
     itSavesExistingValueWhenSubmitted("phoneNumber", "012345");
     itSavesNewValueWhenSubmitted("phoneNumber", "123456");
+  });
+
+  it("Has a submit button", () => {
+    render(<CustomerForm />);
+    const submitButton = container.querySelector('input[type="submit"]');
+    expect(submitButton).not.toBeNull();
   });
 });
