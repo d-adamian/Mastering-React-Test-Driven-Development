@@ -1,6 +1,7 @@
 import React from "react";
 import { createContainer } from "./domManipulators";
 import { AppointmentForm } from "../src/AppointmentForm";
+import { fireEvent } from "@testing-library/dom";
 
 describe("AppointmentForm", () => {
   let render, container;
@@ -62,6 +63,40 @@ describe("AppointmentForm", () => {
       render(<AppointmentForm />);
       expect(labelFor("service")).not.toBeNull();
       expect(labelFor("service").textContent).toEqual("Service");
+    });
+
+    it("assigns an id that matches the label id", () => {
+      render(<AppointmentForm />);
+      expect(field("service").id).toEqual("service");
+    });
+
+    it("saves existing value when submitted", async () => {
+      expect.hasAssertions();
+      render(
+        <AppointmentForm
+          service={"Cut"}
+          onSubmit={(props) => expect(props["service"]).toEqual("Cut")}
+        />
+      );
+      React.act(() => {
+        fireEvent.submit(form("appointment"));
+      });
+    });
+
+    it("saves new value when submitted", async () => {
+      expect.hasAssertions();
+      render(
+        <AppointmentForm
+          service={"Cut"}
+          onSubmit={(props) => expect(props["service"]).toEqual("Blow-dry")}
+        />
+      );
+      React.act(() => {
+        fireEvent.change(field("service"), {
+          target: { value: "Blow-dry", name: "service" },
+        });
+        fireEvent.submit(form("appointment"));
+      });
     });
   });
 });
